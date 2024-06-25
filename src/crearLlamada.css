@@ -1,0 +1,33 @@
+p {
+  text-align: start;
+}
+.container {
+  margin-top: 10px;
+  text-align: start;
+}
+.botones {
+  -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.75);
+}
+.btn {
+  width: 75%;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  background-color: #1976d2;
+  color: white;
+}
+.link {
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 5px;
+  color: black;
+  font-weight: normal;
+}
+.link:hover {
+  background-color: #f3f4f5;
+  text-decoration: underline;
+}
+.imgMenu {
+  max-width: 75px;
+}
