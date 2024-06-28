@@ -25,12 +25,8 @@ function Menu() {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': token
+          'Authorization': `AR-JWT ${token}`
         },
-        // params: {
-        //   fields: "values(Person ID, Remedy Login ID, Profile Status, Full Name, Corporate E-Mail, Assignment Availability)",
-        //   q: "'Remedy Login ID'='luismoralesbarillas'"
-        // }
       };
       
       axios
@@ -38,74 +34,115 @@ function Menu() {
           `${page}/api/arsys/v1.0/entry/CTM:People?fields=values(Person ID, Remedy Login ID, Profile Status, Full Name, Corporate E-Mail, Assignment Availability)&q=%27Remedy%20Login%20ID%27%3D%20%22${username}%22`,
           config
         )
-        .then((res) => console.log(res.status))
-        .catch(function (error) {
-          console.log(error);})
-
         
-      //   .then((res) => 
-      //     {
-      //       let tmpUsr = res.data.entries[0].values['Full Name'];
-      //       setUsuario(tmpUsr)
+        .then((res) => 
+          {
+            let tmpUsr = res.data.entries[0].values['Full Name'];
+            setUsuario(tmpUsr)
 
-      //       let tmpStatus = (res.data.entries[0].values['Assignment Availability']);
+            let tmpStatus = (res.data.entries[0].values['Assignment Availability']);
 
-      //       let tmpPersonId = res.data.entries[0].values['Person ID']
+            let tmpPersonId = res.data.entries[0].values['Person ID']
 
-      //       setPersonId(tmpPersonId)
+            setPersonId(tmpPersonId)
 
-
-      //          if (tmpStatus == 'Yes') {
-      //             setEnable(true)
-      //           }          
-      //   }
-      // )
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
+               if (tmpStatus == 'Yes') {
+                  setEnable(true)
+                }          
+        }
+      )
+        .catch(function (error) {
+          console.log(error);
+        });
       
 
   }, []);
-
-
 
   const cerrarSesion = () => {
     localStorage.clear();
     navigate("/");
   };
 
+const habilitarDeshabilitar = () => {
+
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': `AR-JWT ${token}`
+    },
+  };
+  const habilitar = JSON.stringify({
+    "values": {
+      "Assignment Availability":"Yes"
+    }
+  })
+  const deshabilitar = JSON.stringify({
+    "values": {
+      "Assignment Availability":"No"
+    }
+  })
+
+  if (enable == false) {
+    axios
+    .put(`${page}/api/arsys/v1.0/entry/CTM:People/${personId}`,
+     habilitar, config
+    )
+    .then((res) => 
+      {
+      console.log("ok"+res)
+      setEnable(true)
+    }
+  )
+    .catch(function (error) {
+      console.log(error);
+    });
+  } else {
+    axios
+    .put(`${page}/api/arsys/v1.0/entry/CTM:People/${personId}`,
+     deshabilitar, config
+    )
+    .then((res) => 
+      {
+      console.log("ok"+res)
+      setEnable(false)
+    }
+  )
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+}
   return (
     <div>
-      <h1 style={{ marginTop: 0, marginBottom: 20 }}>
+      <h2 style={{ marginTop: 0, marginBottom: 20 }}>
         Bienvenid@ 👋 {usuario}
-      </h1>
+      </h2>
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-around",
+          display: "contents",
         }}
       >
         <div
-          style={{ cursor: "pointer" }}
-          onClick={() => {
-            navigate("/departamentos");
-          }}
+          style={{ cursor: "pointer", scale: "0.6"}}
+          onClick={() => habilitarDeshabilitar()}
         >
-          <h4>Departamento</h4>
-          <img src={on} alt="Departamento" className="imgMenu" />
+          <img src={enable ? on : off} alt="Departamento" className="imgMenu"/>
+          <h2>{enable ? 'Deshabilitar' : 'Habilitar'}</h2>
         </div>
-        <div style={{ cursor: "pointer" }} onClick={cerrarSesion}>
-          <h4>Cerrar Sesión</h4>
+        <div style={{ cursor: "pointer", scale: "0.6" }} onClick={cerrarSesion}>
           <img src={salida} alt="Cerrar Sesión" className="imgMenu" />
+          <h2>Cerrar Sesión</h2>
         </div>
       </div>
+   
       <img
-        style={{ marginTop: 50 }}
+        style={{ scale: "0.5" }}
         src={logo}
         alt="Logo"
         className="imgMenu"
       />
-    </div>
+      </div>
   );
 }
 

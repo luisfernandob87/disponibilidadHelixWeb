@@ -42,7 +42,7 @@ function Login() {
 
   return (
     <div>
-      <img src={logoInicio} alt="Logo ICASA" />
+      <img src={logoInicio} alt="Logo ICASA" style={{scale: "0.7"}}/>
       <form onSubmit={handleSubmit(submit)}>
         <div>
           <TextField
